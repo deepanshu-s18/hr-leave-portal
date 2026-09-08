@@ -1,0 +1,20 @@
+# Java / Maven
+backend/target/
+*.class
+*.jar
+*.war
+.DS_Store
+.idea/
+*.iml
+backend/.mvn/
+application-local.yml
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# General
+.env
+*.env
