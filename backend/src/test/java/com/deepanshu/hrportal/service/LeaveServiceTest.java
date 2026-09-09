@@ -13,7 +13,8 @@ import com.deepanshu.hrportal.repository.LeaveRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,7 @@ import static org.mockito.Mockito.*;
  * cancel()  → ownership guard, status guard, balance restoration
  */
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @DisplayName("LeaveService Unit Tests")
 class LeaveServiceTest {
 
@@ -518,9 +520,9 @@ class LeaveServiceTest {
 
     private void mockSecurityContext(String username) {
         Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn(username);
+        lenient().when(auth.getName()).thenReturn(username);
         SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(auth);
+        lenient().when(securityContext.getAuthentication()).thenReturn(auth);
         SecurityContextHolder.setContext(securityContext);
     }
 }
