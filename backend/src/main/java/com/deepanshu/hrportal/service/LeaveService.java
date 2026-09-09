@@ -33,7 +33,7 @@ public class LeaveService {
     // ── APPLY ────────────────────────────────────────────────────────────────
 
     @Transactional
-    public LeaveResponse apply(LeaveRequest.Create request) {
+    public LeaveResponse.LeaveDetail apply(LeaveRequest.Create request) {
         Employee employee = getCurrentEmployee();
 
         // Guard 1: start date must not be in the past
@@ -77,7 +77,7 @@ public class LeaveService {
     // ── APPROVE ──────────────────────────────────────────────────────────────
 
     @Transactional
-    public LeaveResponse approve(Long leaveId, String managerComment) {
+    public LeaveResponse.LeaveDetail approve(Long leaveId, String managerComment) {
         Employee manager = getCurrentEmployee();
         com.deepanshu.hrportal.model.LeaveRequest leave = findLeave(leaveId);
 
@@ -117,7 +117,7 @@ public class LeaveService {
     // ── REJECT ───────────────────────────────────────────────────────────────
 
     @Transactional
-    public LeaveResponse reject(Long leaveId, String managerComment) {
+    public LeaveResponse.LeaveDetail reject(Long leaveId, String managerComment) {
         Employee manager = getCurrentEmployee();
         com.deepanshu.hrportal.model.LeaveRequest leave = findLeave(leaveId);
 
@@ -152,7 +152,7 @@ public class LeaveService {
     // ── CANCEL ───────────────────────────────────────────────────────────────
 
     @Transactional
-    public LeaveResponse cancel(Long leaveId) {
+    public LeaveResponse.LeaveDetail cancel(Long leaveId) {
         Employee employee = getCurrentEmployee();
         com.deepanshu.hrportal.model.LeaveRequest leave = findLeave(leaveId);
 
@@ -187,7 +187,7 @@ public class LeaveService {
     // ── QUERIES ──────────────────────────────────────────────────────────────
 
     @Transactional(readOnly = true)
-    public Page<LeaveResponse> getMyLeaves(Status status, Pageable pageable) {
+    public Page<LeaveResponse.LeaveDetail> getMyLeaves(Status status, Pageable pageable) {
         Employee employee = getCurrentEmployee();
         if (status != null) {
             return leaveRepository.findByEmployeeIdAndStatus(employee.getId(), status, pageable)
@@ -198,14 +198,14 @@ public class LeaveService {
     }
 
     @Transactional(readOnly = true)
-    public Page<LeaveResponse> getPendingForManager(Pageable pageable) {
+    public Page<LeaveResponse.LeaveDetail> getPendingForManager(Pageable pageable) {
         Employee manager = getCurrentEmployee();
         return leaveRepository.findPendingByManagerId(manager.getId(), pageable)
             .map(LeaveResponse::from);
     }
 
     @Transactional(readOnly = true)
-    public Page<LeaveResponse> getAll(Status status, Pageable pageable) {
+    public Page<LeaveResponse.LeaveDetail> getAll(Status status, Pageable pageable) {
         if (status != null) {
             return leaveRepository.findByStatus(status, pageable).map(LeaveResponse::from);
         }
